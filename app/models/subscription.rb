@@ -804,6 +804,11 @@ class Subscription < ApplicationRecord
     original_purchase.tier
   end
 
+  def tier_duration_in_months
+    return nil unless tier.present?
+    tier.tier_duration_in_months
+  end
+
   def has_free_trial?
     free_trial_ends_at.present?
   end

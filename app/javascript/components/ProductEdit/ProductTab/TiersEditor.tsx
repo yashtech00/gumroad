@@ -52,6 +52,7 @@ export const TiersEditor = ({ tiers, onChange }: { tiers: Tier[]; onChange: (tie
             name: "Untitled",
             description: "",
             max_purchase_count: null,
+            duration_in_months: null,
             customizable_price: false,
             apply_price_changes_to_existing_memberships: false,
             subscription_price_change_effective_date: null,
@@ -232,6 +233,34 @@ const TierEditor = ({
             >
               {(inputProps) => <input id={`${uid}-max-purchase-count`} type="number" placeholder="∞" {...inputProps} />}
             </NumberInput>
+          </fieldset>
+          <fieldset>
+            <Toggle
+              value={tier.duration_in_months != null}
+              onChange={(enabled) => updateTier({ duration_in_months: enabled ? 12 : null })}
+            >
+              Require a minimum subscription period
+            </Toggle>
+            {tier.duration_in_months != null && (
+              <div style={{ marginTop: "var(--spacer-2)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--spacer-2)" }}>
+                  <NumberInput
+                    onChange={(value) => updateTier({ duration_in_months: value })}
+                    value={tier.duration_in_months}
+                  >
+                    {(inputProps) => <input id={`${uid}-duration-in-months`} type="number" min="1" {...inputProps} />}
+                  </NumberInput>
+                  <select
+                    value="months"
+                    aria-label="Duration unit"
+                    style={{ padding: "var(--spacer-2)", border: "1px solid var(--border-color)", borderRadius: "var(--border-radius)" }}
+                  >
+                    <option value="months">Months</option>
+                  </select>
+                </div>
+                <small>Set the minimum subscription period for this tier</small>
+              </div>
+            )}
           </fieldset>
           <fieldset
             style={{

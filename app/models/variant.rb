@@ -13,6 +13,7 @@ class Variant < BaseVariant
   validates_presence_of :variant_category
   validate :price_must_be_within_range
   validates :duration_in_minutes, numericality: { greater_than: 0 }, if: -> { link.native_type == Link::NATIVE_TYPE_CALL }
+  validates :duration_in_months, numericality: { greater_than: 0 }, allow_nil: true
 
   before_create :set_position
   after_save :set_customizable_price
@@ -95,7 +96,7 @@ class Variant < BaseVariant
     notify_members_of_price_change = variant.should_notify_members_of_price_change?(params)
     %i[name description price_difference_cents max_purchase_count
        position_in_category customizable_price subscription_price_change_effective_date
-       subscription_price_change_message duration_in_minutes].each do |attribute|
+       subscription_price_change_message duration_in_minutes duration_in_months].each do |attribute|
       variant[attribute] = params[attribute] if params.key?(attribute)
     end
     variant.apply_price_changes_to_existing_memberships = params[:apply_price_changes_to_existing_memberships]
@@ -117,6 +118,16 @@ class Variant < BaseVariant
   def should_notify_members_of_price_change?(params)
     return false unless params[:apply_price_changes_to_existing_memberships]
     apply_price_changes_to_existing_memberships != params[:apply_price_changes_to_existing_memberships] || subscription_price_change_effective_date != params[:subscription_price_change_effective_date]&.to_date
+  end
+
+  def tier_duration_in_months
+    return link.duration_in_months if link.is_tiered_membership? && duration_in_months.nil?
+    duration_in_months
+  end
+
+  def tier_duration_display
+    return nil unless tier_duration_in_months
+    "#{tier_duration_in_months} month#{tier_duration_in_months == 1 ? '' : 's'}"
   end
 
   private

@@ -34,6 +34,8 @@ class Purchase::BaseService
       charge_occurrence_count =
         if purchase.is_installment_payment
           purchase.link.installment_plan.number_of_installments
+        elsif purchase.tier&.tier_duration_in_months.present?
+          purchase.tier.tier_duration_in_months / BasePrice::Recurrence.number_of_months_in_recurrence(purchase.price.recurrence)
         elsif purchase.link.duration_in_months.present?
           purchase.link.duration_in_months / BasePrice::Recurrence.number_of_months_in_recurrence(purchase.price.recurrence)
         end

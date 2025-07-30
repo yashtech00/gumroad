@@ -115,6 +115,7 @@ class LinkPolicy < ApplicationPolicy
         :max_purchase_count,
         :price_difference_cents,
         :duration_in_minutes,
+        :duration_in_months,
         :customizable_price,
         :apply_price_changes_to_existing_memberships,
         :subscription_price_change_effective_date,

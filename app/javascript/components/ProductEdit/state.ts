@@ -29,6 +29,7 @@ export type Variant = {
   name: string;
   description: string;
   max_purchase_count: number | null;
+  duration_in_months: number | null;
   integrations: Record<keyof Product["integrations"], boolean>;
   newlyAdded?: boolean;
   rich_content: Page[];

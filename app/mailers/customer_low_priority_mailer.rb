@@ -182,7 +182,7 @@ class CustomerLowPriorityMailer < ApplicationMailer
            "is changing on #{@effective_date}.<br /><br />"
       ) + "You can modify or cancel your membership at any time."
     @next_payment_date = (effective_date + 4.days).to_date.strftime("%B %e, %Y")
-    charge_occurrence_count = tier.link.duration_in_months.present? ? tier.link.duration_in_months / BasePrice::Recurrence.number_of_months_in_recurrence(recurrence) : nil
+          charge_occurrence_count = tier.tier_duration_in_months.present? ? tier.tier_duration_in_months / BasePrice::Recurrence.number_of_months_in_recurrence(recurrence) : nil
     @previous_price = formatted_price_in_currency_with_recurrence(new_price * 0.8, tier.link.price_currency_type, recurrence, charge_occurrence_count)
     @new_price = formatted_price_in_currency_with_recurrence(new_price, tier.link.price_currency_type, recurrence, charge_occurrence_count)
     @payment_method = "VISA *1234"

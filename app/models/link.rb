@@ -312,6 +312,15 @@ class Link < ApplicationRecord
     end
   end
 
+  def tier_has_custom_duration?(tier)
+    tier.duration_in_months.present? && tier.duration_in_months != duration_in_months
+  end
+
+  def tier_duration_display(tier)
+    return nil unless tier.tier_duration_in_months
+    "#{tier.tier_duration_in_months} month#{tier.tier_duration_in_months == 1 ? '' : 's'}"
+  end
+
   def initialize_default_tier_prices!
     if default_tier.present?
       # create a default price for the default tier
